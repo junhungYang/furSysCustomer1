@@ -6,9 +6,7 @@ export const store = new Vuex.Store({
       provinceId:'',
       provinceName:'',
       cityId:'',
-      cityName:'',
-      districtId:'',
-      districName:''
+      cityName:''
   },
   mutations: {
       changeProvince(state,payload) {
@@ -19,10 +17,7 @@ export const store = new Vuex.Store({
       changeCity(state,payload) {
         state.cityId = payload[0]
         state.cityName = payload[1]
-      },
-      changeDistrict(state,payload) {
-        state.districtId = payload[0]
-        state.districName = payload[1]
+        console.log(state.cityId,state.cityName)
       }
   }
 });

@@ -25,15 +25,13 @@ export default {
       pid: 2
     }).then((res) => {
       if (res.data.code === 0) {
-        console.log(this.options)
         let district = res.data.data
         district.forEach((item) => {
           this.options.push({
-            value:item.id,
+            value:`${item.id}-${item.name}`,
             label:item.name
           })
         })
-        console.log(this.options)
       }
     })
   }
