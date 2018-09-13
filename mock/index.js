@@ -15,4 +15,23 @@ Mock.mock("/api/user/getUserOrderList", {
   codeMsg: "",
     data: data.getUserOrderList
 });
-console.log(data.getUserOrderList);
+Mock.mock("/api/user/updateUserInfo", {
+  code: 0,
+  codeMsg: "",
+  data: data.updateUserInfo
+});
+Mock.mock("/api/dealer/findListByLv", {
+  code: 0,
+  codeMsg: "",
+    data: data.findListByLv
+});
+Mock.mock("/api/dealer/findListByLv1", {
+  code: 0,
+  codeMsg: "",
+    data: data.findListByLv1
+});
+Mock.mock("/api/dealer/findListByLv2", {
+  code: 0,
+  codeMsg: "",
+    data: data.findListByLv2
+});

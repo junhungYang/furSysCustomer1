@@ -12,7 +12,7 @@
                         <span></span>
                     </div>
                     <div class="cont">
-                        <input type="text" placeholder="请输入您的姓氏" class="text">
+                        <input type="text" placeholder="请输入您的姓氏" class="text" v-model="nickName">
                     </div>
                 </li>
                 <li>
@@ -45,7 +45,7 @@
                         <span></span>
                     </div>
                     <div class="cont">
-                        <input type="text" placeholder="请输入您的联系电话" class="text">
+                        <input type="text" placeholder="请输入您的联系电话" class="text" v-model="phoneNum">
                     </div>
                 </li>
                 <li>
@@ -80,32 +80,68 @@
         </div>
         <div class="btn">
             <button>
-                <router-link tag="div" to="userInfo">{{btnText}}</router-link>
+                <router-link tag="div" to="userInfo" >{{btnText}}</router-link>
             </button>
         </div>
     </div>
 </template>
 <script>
-import VDistpicker from 'v-distpicker'
+import axios from 'axios'
 export default {
     data() {
         return {
             mySex: 'male',
             btnText:'成为会员',
+            nickName:'',
+            phoneNum:'',
             placeholders: {
                 province: '------- 省 --------',
                 city: '--- 市 ---',
                 area: '--- 区 ---',
-            }
+            },
+            province:[],
+            city:[],
+            district:[]
         }
     },
     created() {
         if(this.$route.params.remark) {
             this.btnText = '确认修改'
         }
+        this.getPosition()
     },
-    components: {
-        'v-distpicker': VDistpicker
+    methods: {
+        getPosition() {
+            //省
+            axios.get('/api/dealer/findListByLv',{
+                lv: 1,
+                pid:0 
+            }).then((res) => {
+                if(res.data.code === 0) {
+                    this.province = res.data.data
+                }
+            })
+            //式
+            axios.get('/api/dealer/findListByLv1',{
+                lv: 2,
+                pid:1 
+            }).then((res) => {
+                if(res.data.code === 0) {
+                    this.city = res.data.data
+                    console.log(this.city)
+                }
+            })
+            //区
+            axios.get('/api/dealer/findListByLv',{
+                lv: 3,
+                pid:2 
+            }).then((res) => {
+                if(res.data.code === 0) {
+                    this.district = res.data.data
+                    console.log(this.district)
+                }
+            })
+        }
     }
 }
 </script>
