@@ -9,11 +9,11 @@
             </div>
             <div class="proPic">
                 <div class="picture">
-                    <img src="/static/img/10.jpg" alt="">
+                    <img :src="userInfoData.head_img_url" alt="">
                 </div>
                 <div class="level">
-                    <span>壹加壹 · 高级会员</span>
-                    <img src="/static/img/高级@2x.png" alt="">
+                    <span>{{userInfoData.level_id === 1 ? '壹加壹 · 初级会员' : '壹加壹 · 高级会员'}}</span>
+                    <img :src="userInfoData.level_id === 1 ? '/static/img/初级@2x.png' :'/static/img/高级@2x.png'" alt="">
                 </div>
             </div>
         </header>
@@ -21,9 +21,29 @@
             <div class="msg-wrap">
                 <div class="desc">
                     <ul>
-                        <li v-for="item in userInfo">
-                            <span>{{item.title}}</span>
-                            <span>{{item.cont}}</span>
+                        <li>
+                            <span>会员名称</span>
+                            <span>
+                                 {{userInfoData.nickname}}
+                            </span>
+                        </li>
+                        <li>
+                            <span>联系电话</span>
+                            <span>
+                                {{userInfoData.mobile}}
+                            </span>
+                        </li>
+                        <li>
+                            <span>居住地区</span>
+                            <span>
+                                {{userInfoData.province}}{{userInfoData.city}}
+                            </span>
+                        </li>
+                        <li>
+                            <span>会员编号</span>
+                            <span>
+                                {{userInfoData.member_code}}
+                            </span>
                         </li>
                     </ul>
                     <div class="desc-footer">
@@ -31,49 +51,41 @@
                     </div>
                 </div>
                 <div class="QR-code">
-                    <img src="/static/img/QRcode.jpg" alt="">
+                    <img :src="userInfoData.qr_code_url" alt="">
                 </div>
             </div>
             <div class="footer">出示上面二维码于电源可进行下单</div>
         </div>
         <div class="signle-record">
             <div class="title">下单记录</div>
-            <ul>
-                <li v-for="item in record">
-                    <div class="shop-time">
-                        <div class="shop">
-                            所选门店: <span>{{item.shop}}</span>
+            <div class="scrollWrap" ref="scrollWrap">
+                <ul>
+                    <li v-for="item in record">
+                        <div class="shop-time">
+                            <div class="shop">
+                                所选门店: <span>{{item.shop}}</span>
+                            </div>
+                            <div class="when">
+                                <span class="date">{{item.date}}</span>
+                                <span class="time">{{item.time}}</span>
+                            </div>
                         </div>
-                        <div class="when">
-                            <span class="date">{{item.date}}</span>
-                            <span class="time">{{item.time}}</span>
+                        <div class="series">
+                            购买系列: <span>{{item.goods}}</span>
                         </div>
-                    </div>
-                    <div class="series">
-                        购买系列: <span>{{item.goods}}</span>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import axios from 'axios'
+import BScroll from 'better-scroll'
 export default {
     data() {
         return {
-            userInfo: [{
-                title:'会员名称',
-                cont:'唐先生'
-            },{
-                title:'联系电话',
-                cont:'15218917058'
-            },{
-                title:'居住地区',
-                cont:'广东佛山'
-            },{
-                title:'会员编号',
-                cont:'C000001'
-            },],
+            userInfoData:{},
             record:[{
                 shop:'GDFS',
                 date:'2018-07-11',
@@ -104,14 +116,39 @@ export default {
                 date:'2018-07-11',
                 time:'13:25:04',
                 goods:'听风细雨'
-            },]
+            },{
+                shop:'GDFS',
+                date:'2018-07-11',
+                time:'13:25:04',
+                goods:'听风细雨'
+            },{
+                shop:'GDFS',
+                date:'2018-07-11',
+                time:'13:25:04',
+                goods:'听风细雨'
+            }]
         }
+    },
+    mounted() {
+        this.scrollList = new BScroll(this.$refs.scrollWrap,{
+                click:true,
+                probeType:3
+            })
+    },
+    created() {
+        axios.post('/api/user/getUserInfo').then ((res) => {
+            if(res.data.code === 0) {
+                this.userInfoData = res.data.data 
+                console.log(this.userInfoData)
+            }
+        })
     }
 }
 </script>
 
 <style lang="less" scoped>
 .userInfo {
+height: 100%;
   display: flex;
   flex-direction: column;
   background:#f5f5f5;
@@ -175,6 +212,7 @@ export default {
     border-bottom-right-radius: 15px;
     margin-bottom: 10px;
     box-shadow: 0 0 5px #ddd;
+    height: 200px;
     .msg-wrap {
       display: flex;
       margin-bottom: 10px;
@@ -194,6 +232,9 @@ export default {
                     flex:1;
                     text-align: right;
                     color:#676767;
+                    white-space:nowrap ; 
+                    overflow: hidden;
+                    text-overflow: ellipsis
                 }
             }
         }
@@ -232,6 +273,8 @@ export default {
   .signle-record {
     flex: 1;
     overflow: hidden;
+    display:flex;
+    flex-direction: column;
     .title {
       height: 32px;
       background: #c59a68;
@@ -240,7 +283,10 @@ export default {
       font-size:15px;
       color:#fff;
     }
-    ul {
+    .scrollWrap {
+        overflow: hidden;
+        flex:1;
+            ul {
       li {
         height: 60px;
         border-bottom: 1px solid #e8e8e8;
@@ -269,6 +315,7 @@ export default {
             }
         }
       }
+    }
     }
   }
 }
