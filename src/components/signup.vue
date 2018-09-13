@@ -56,12 +56,10 @@
                     <div class="line">
                         <span></span>
                     </div>
-                    <div class="cont">
-                        <!-- <v-distpicker  class="wrapper">
-                            <select class="sheng"></select>
-                            <select></select>
-                            <select></select>
-                        </v-distpicker> -->
+                    <div class="cont position-wrap">
+                        <div class="select"><proviceSelect></proviceSelect></div>
+                        <div class="select"><citySelect></citySelect></div>
+                        <div class="select"><districtSelect></districtSelect></div>
                     </div>
                 </li>
                 <li>
@@ -87,6 +85,9 @@
 </template>
 <script>
 import axios from 'axios'
+import citySelect from '../plugin/citySelect'
+import districtSelect from '../plugin/districtSelect'
+import proviceSelect from '../plugin/proviceSelect'
 export default {
     data() {
         return {
@@ -112,36 +113,13 @@ export default {
     },
     methods: {
         getPosition() {
-            //省
-            axios.get('/api/dealer/findListByLv',{
-                lv: 1,
-                pid:0 
-            }).then((res) => {
-                if(res.data.code === 0) {
-                    this.province = res.data.data
-                }
-            })
-            //式
-            axios.get('/api/dealer/findListByLv1',{
-                lv: 2,
-                pid:1 
-            }).then((res) => {
-                if(res.data.code === 0) {
-                    this.city = res.data.data
-                    console.log(this.city)
-                }
-            })
-            //区
-            axios.get('/api/dealer/findListByLv',{
-                lv: 3,
-                pid:2 
-            }).then((res) => {
-                if(res.data.code === 0) {
-                    this.district = res.data.data
-                    console.log(this.district)
-                }
-            })
+ 
         }
+    },
+    components: {
+        citySelect,
+        districtSelect,
+        proviceSelect
     }
 }
 </script>
@@ -191,6 +169,12 @@ export default {
             display: inline-block;
             width: 1px;
             background: #e8e8e8;
+          }
+        }
+        .position-wrap {
+            .select {
+              display: inline-block;
+            //   position: absolute;
           }
         }
         .cont {

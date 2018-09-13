@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="value" placeholder="请选择">
+  <el-select v-model="value" placeholder="请选择" size="mini">
     <el-option
       v-for="item in options"
       :key="item.value"
@@ -10,27 +10,29 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default {
     data() {
       return {
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        options: [],
         value: ''
       }
-    }
+    },
+    created() {
+    axios.get('/api/dealer/findListByLv', {
+      lv: 0,
+      pid: 1
+    }).then((res) => {
+      if (res.data.code === 0) {
+        let district = res.data.data
+        district.forEach((item) => {
+          this.options.push({
+            value:item.id,
+            label:item.name
+          })
+        })
+      }
+    })
+  }
   }
 </script>
