@@ -80,7 +80,7 @@
         </div>
         <div class="btn">
             <button>
-                <router-link tag="div" to="userInfo">成为会员</router-link>
+                <router-link tag="div" to="userInfo">{{btnText}}</router-link>
             </button>
         </div>
     </div>
@@ -91,11 +91,17 @@ export default {
     data() {
         return {
             mySex: 'male',
+            btnText:'成为会员',
             placeholders: {
                 province: '------- 省 --------',
                 city: '--- 市 ---',
                 area: '--- 区 ---',
             }
+        }
+    },
+    created() {
+        if(this.$route.params.remark) {
+            this.btnText = '确认修改'
         }
     },
     components: {

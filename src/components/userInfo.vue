@@ -46,8 +46,10 @@
                             </span>
                         </li>
                     </ul>
-                    <div class="desc-footer">
-                        <span>点击修改个人资料 ></span>
+                    <div class="desc-footer" @click="routerToSignUp">
+                        <span>
+                            点击修改个人资料 >
+                        </span>
                     </div>
                 </div>
                 <div class="QR-code">
@@ -60,20 +62,20 @@
             <div class="title">下单记录</div>
             <div class="scrollWrap" ref="scrollWrap">
                 <ul>
-                    <li v-for="item in record">
+                    <li v-for="item in historyList">
                         <div class="shop-time">
                             <div class="shop">
-                                所选门店: <span>{{item.shop}}</span>
+                                所选门店: <span>{{item.dealer_name}}</span>
                             </div>
                             <div class="when">
-                                <span class="date">{{item.date}}</span>
-                                <span class="time">{{item.time}}</span>
+                                <span class="date">{{item.create_time}}</span>
                             </div>
                         </div>
                         <div class="series">
-                            购买系列: <span>{{item.goods}}</span>
+                            购买系列: <span>{{item.series_name}}</span>
                         </div>
                     </li>
+                    <div class="loading" v-show="loadingFlag">{{loadingState}}</div>
                 </ul>
             </div>
         </div>
@@ -82,132 +84,124 @@
 <script>
 import axios from 'axios'
 import BScroll from 'better-scroll'
+import Vue from 'vue'
+import waterfull from '../plugin/waterfullApi'
+import router from '../router/index'
 export default {
     data() {
         return {
-            userInfoData:{},
-            record:[{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            },{
-                shop:'GDFS',
-                date:'2018-07-11',
-                time:'13:25:04',
-                goods:'听风细雨'
-            }]
+            userInfoData: {},
+            historyList: [],
+            loadingFlag: false
         }
     },
     mounted() {
-        this.scrollList = new BScroll(this.$refs.scrollWrap,{
-                click:true,
-                probeType:3
-            })
+        this.scrollList = new BScroll(this.$refs.scrollWrap, {
+            click: true,
+            probeType: 3
+        })
+        waterfull.scrollGetData(this, 'scrollWrap', 'scrollList', '/api/user/getUserOrderList')
     },
     created() {
-        axios.post('/api/user/getUserInfo').then ((res) => {
-            if(res.data.code === 0) {
-                this.userInfoData = res.data.data 
-                console.log(this.userInfoData)
-            }
-        })
+        this.waterfullInit()
+        this.getUserInfo()
+        this.getUserOrderList(1)
+    },
+    methods: {
+        routerToSignUp() {
+            router.push({name:'signUp',params: { remark: '修改资料' }})
+        },
+        getUserInfo() {
+            axios.post('/api/user/getUserInfo').then((res) => {
+                if (res.data.code === 0) {
+                    this.userInfoData = res.data.data
+                }
+            })
+        },
+        getUserOrderList(num) {
+            axios.post('/api/user/getUserOrderList', {
+                pageNumber: num,
+                pageSize: 10
+            }).then((res) => {
+                this.historyList = res.data.data.list
+                console.log(this.historyList)
+                this.scrollRefresh()
+            })
+        },
+        waterfullInit() {
+            waterfull.propInit(this)
+        },
+        scrollRefresh() {
+            Vue.nextTick(() => {
+                this.scrollList.refresh()
+            })
+        }
     }
 }
 </script>
 
 <style lang="less" scoped>
 .userInfo {
-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  background:#f5f5f5;
+  background: #f5f5f5;
   header {
     height: 150px;
-    background:rgb(0, 0, 0);
-    display:flex;
+    background: rgb(0, 0, 0);
+    display: flex;
     .brand {
-        flex:1;
-        .logo {
-            margin-left:44px;
-            margin-top:27px;
-            img {
-                height:67px;
-            }
+      flex: 1;
+      .logo {
+        margin-left: 44px;
+        margin-top: 27px;
+        img {
+          height: 67px;
         }
-        .desc {
-            color:#d2b9a0;
-            font-size:20px;
-            transform: scale(0.5);
-            margin-left:44px;
-            margin-top:10px;
-            transform-origin: left;
-        }
+      }
+      .desc {
+        color: #d2b9a0;
+        font-size: 20px;
+        transform: scale(0.5);
+        margin-left: 44px;
+        margin-top: 10px;
+        transform-origin: left;
+      }
     }
     .proPic {
-        // width:130px;
-        margin-top:20px;
-        margin-right:13px;
-        .picture {
-            margin-left:10px;
-            width:77px;
-            height:77px;
-            background:url('/static/img/circleBg.png');
-            background-size: cover;
-            border-radius: 50%;
-            overflow: hidden;
-            padding:3px;
-            img {
-                width:100%;
-                height:100%;
-                border-radius: 50%;
-            }
+      // width:130px;
+      margin-top: 20px;
+      margin-right: 13px;
+      .picture {
+        margin-left: 10px;
+        width: 77px;
+        height: 77px;
+        background: url("/static/img/circleBg.png");
+        background-size: cover;
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 3px;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
         }
-        .level {
-            margin-top:10px;
-            span {
-                color:#fff;
-                font-size: 13px;
-            }
-            img {
-                width:13px;
-                height:11px;
-            }
+      }
+      .level {
+        margin-top: 10px;
+        span {
+          color: #fff;
+          font-size: 13px;
         }
+        img {
+          width: 13px;
+          height: 11px;
+        }
+      }
     }
   }
   .my-msg {
-      background:#fff;
+    background: #fff;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     margin-bottom: 10px;
@@ -219,34 +213,34 @@ height: 100%;
       .desc {
         flex: 1;
         ul {
-            margin:18px 18px 0 18px;
-            li {
-                height:31px;
-                line-height:31px;
-                font-size: 13px;
-                display: flex;
-                span:nth-of-type(1) {
-                    color:#e2ccb3;
-                }
-                span:nth-of-type(2) {
-                    flex:1;
-                    text-align: right;
-                    color:#676767;
-                    white-space:nowrap ; 
-                    overflow: hidden;
-                    text-overflow: ellipsis
-                }
+          margin: 18px 18px 0 18px;
+          li {
+            height: 31px;
+            line-height: 31px;
+            font-size: 13px;
+            display: flex;
+            span:nth-of-type(1) {
+              color: #e2ccb3;
             }
+            span:nth-of-type(2) {
+              flex: 1;
+              text-align: right;
+              color: #676767;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
         }
         .desc-footer {
           text-align: center;
-          color:#b5b5b5;
+          color: #b5b5b5;
           line-height: 10px;
-          margin-top:9px;
+          margin-top: 9px;
           span {
-              display: block;
-              font-size: 20px;
-              transform: scale(0.5);
+            display: block;
+            font-size: 20px;
+            transform: scale(0.5);
           }
         }
       }
@@ -254,68 +248,76 @@ height: 100%;
         width: 147px;
         height: 147px;
         border: 2px solid #d2b9a0;
-        margin-right:13px;
-        margin-top:13px;
+        margin-right: 13px;
+        margin-top: 13px;
         img {
-            width: 100%;
+          width: 100%;
         }
       }
     }
     .footer {
-        // margin-top:10px;
-        text-align: center;
-        font-size: 20px;
-        transform: scale(0.5);
-        color:#e2ccb3;
-        margin-bottom: 5px;
+      // margin-top:10px;
+      text-align: center;
+      font-size: 20px;
+      transform: scale(0.5);
+      color: #e2ccb3;
+      margin-bottom: 5px;
     }
   }
   .signle-record {
     flex: 1;
     overflow: hidden;
-    display:flex;
+    display: flex;
     flex-direction: column;
     .title {
       height: 32px;
       background: #c59a68;
       text-align: center;
       line-height: 32px;
-      font-size:15px;
-      color:#fff;
+      font-size: 15px;
+      color: #fff;
     }
     .scrollWrap {
-        overflow: hidden;
-        flex:1;
-            ul {
-      li {
-        height: 60px;
-        border-bottom: 1px solid #e8e8e8;
-        display: flex;
-        padding:0 13px;
-        .shop-time {
+      overflow: hidden;
+      flex: 1;
+      ul {
+        background: #fff;
+        li {
+          height: 60px;
+          border-bottom: 1px solid #e8e8e8;
+          display: flex;
+          padding: 0 13px;
+          .shop-time {
             margin-top: 12px;
-            flex:1;
+            flex: 1;
             font-size: 13px;
             .shop {
-                color:#353535;
+              color: #353535;
             }
             .when {
-                margin-top: 13px;
-                color:#8e8e8e;
+              margin-top: 13px;
+              color: #8e8e8e;
             }
-        }
-        .series {
+          }
+          .series {
             margin-top: 12px;
             width: 150px;
             font-size: 13px;
             text-align: right;
-            color:#353535;
+            color: #353535;
             span {
-                color: #c59a68;
+              color: #c59a68;
             }
+          }
+        }
+        .loading {
+          height: 40px;
+          text-align: center;
+          line-height: 40px;
+          color: #ccc;
+          font-size: 12px;
         }
       }
-    }
     }
   }
 }

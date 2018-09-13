@@ -10,3 +10,9 @@ Mock.mock("/api/user/getUserInfo", {
   codeMsg: "",
   data: data.hasUserInfo
 });
+Mock.mock("/api/user/getUserOrderList", {
+  code: 0,
+  codeMsg: "",
+    data: data.getUserOrderList
+});
+console.log(data.getUserOrderList);
