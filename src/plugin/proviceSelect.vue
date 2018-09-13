@@ -11,6 +11,7 @@
 
 <script>
 import axios from 'axios'
+import {mapState,mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -19,20 +20,29 @@ import axios from 'axios'
       }
     },
     created() {
-    axios.get('/api/dealer/findListByLv', {
-      lv: 0,
-      pid: 1
-    }).then((res) => {
-      if (res.data.code === 0) {
-        let district = res.data.data
-        district.forEach((item) => {
-          this.options.push({
-            value:item.id,
-            label:item.name
-          })
+        axios.get('/api/dealer/findListByLv', {
+        lv: 0,
+        pid: 1
+        }).then((res) => {
+        if (res.data.code === 0) {
+            let district = res.data.data
+            district.forEach((item) => {
+            this.options.push({
+                value: `${item.id}-${item.name}`,
+                label:item.name
+            })
+            })
+        }
         })
-      }
-    })
-  }
+    },
+    methods: {
+        ...mapMutations(['changeProvince'])
+    },
+    watch: {
+        value() {
+            let arr = this.value.split('-')
+            this.changeProvince(arr)
+        }
+    }
   }
 </script>
