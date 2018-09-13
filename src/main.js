@@ -5,8 +5,10 @@ import '../static/reset.css'
 import "../mock/index";
 import ElementUI from 'element-ui'
 import {store} from './store/store'
+import domain from "./domain.js";
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+global.domain = domain;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -6,7 +6,8 @@ export const store = new Vuex.Store({
       provinceId:'',
       provinceName:'',
       cityId:'',
-      cityName:''
+      cityName:'',
+      cityList:[]
   },
   mutations: {
       changeProvince(state,payload) {
@@ -18,6 +19,16 @@ export const store = new Vuex.Store({
         state.cityId = payload[0]
         state.cityName = payload[1]
         console.log(state.cityId,state.cityName)
+      },
+      cityListInit(state,payload) {
+        payload.forEach(item => {
+          state.cityList.forEach((item) => {
+            state.cityList.push({
+              value:item.id,
+              label:item.name
+            })
+          })
+        });
       }
   }
 });
