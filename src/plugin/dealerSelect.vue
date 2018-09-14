@@ -14,7 +14,7 @@
 <script>
 import BScroll from 'better-scroll'
 import Vue from 'vue'
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 export default {
     data() {
         return {
@@ -26,6 +26,7 @@ export default {
         ...mapState(['dealerList'])
     },
     methods: {
+        ...mapMutations(['changeDealer']),
         changeValue(value) {
             this.listShowState = false
             this.value = value
@@ -42,6 +43,14 @@ export default {
             Vue.nextTick(() => {
                 this.scrollList.refresh()
             })
+            let id = ''
+            this.dealerList.forEach(obj => {
+                if(obj.label === this.value) {
+                    id = obj.value
+                    return
+                }
+            });
+            this.changeDealer(id)
         },
         listShowState() {
             Vue.nextTick(() => {

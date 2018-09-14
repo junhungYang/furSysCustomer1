@@ -7,13 +7,16 @@ export const store = new Vuex.Store({
            provinceName: "",
            cityName:"",
            cityId: "",
+           districtId:"",
            districtName: "",
+           dealerName:"",
            cityList: [],
            districtList: [],
            dealerList: [],
            nickName:'',
            mySex:'',
-           phoneNum:''
+           phoneNum:'',
+           userInfoData:{}
          },
          mutations: {
            changeProvince(state, payload) {
@@ -23,6 +26,13 @@ export const store = new Vuex.Store({
            changeCity(state, payload) {
              state.cityId = payload[0];
              state.cityName = payload[1];
+           },
+           changeDistric(state,payload) {
+             state.districtId = payload[0];
+             state.districtName = payload[1];
+           },
+           changeDealer(state,payload) {
+             state.dealerId = payload
            },
            cityListInit(state, payload) {
              payload.forEach(item => {
@@ -35,7 +45,7 @@ export const store = new Vuex.Store({
            districtListInit(state, payload) {
              payload.forEach(item => {
                state.districtList.push({
-                 value: item.id,
+                 value: `${item.id}-${item.name}`,
                  label: item.name
                });
              });
@@ -52,6 +62,9 @@ export const store = new Vuex.Store({
                  label: item.name
                });
              });
+           },
+           userInfoInit(state,payload) {
+             state.userInfoData = payload
            }
          }
        });

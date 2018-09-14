@@ -25,27 +25,30 @@ const waterfullApi = {
         //为了模拟loading效果，暂时使用延时，真正上线时应取消
         setTimeout(() => {
             axios
-              .post(url, {
+              .post(`${domain.testUrl}user/getUserOrderList`, {
                 pageNumber: this.waterfullIndex,
-                pageSize: 15,
-                start: mod.dateStr,
-                end: mod.dateStr
+                pageSize: 10
+              },{
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded'
+                  } 
               })
               .then(res => {
                 if (res.data.code === 0) {
-                    mod.historyList = mod.historyList.concat(res.data.data.list);
-                    this.scrollRefresh(mod, scrollList);
-                    mod.loadingState = "loading...";
+                    console.log(res.data.data)
+                  mod.historyList = mod.historyList.concat(res.data.data.list);
+                  this.scrollRefresh(mod, scrollList);
+                  mod.loadingState = "loading...";
+                  mod.loadingFlag = false;
+                  mod.scrollBottomFlag = true;
+                } else if (res.data.code === 1) {
+                  mod.loadingState = "没有数据了...";
+                  setTimeout(() => {
                     mod.loadingFlag = false;
                     mod.scrollBottomFlag = true;
-                }else if(res.data.code === 1) {
-                    mod.loadingState = "没有数据了...";
-                    setTimeout(() => {
-                        mod.loadingFlag = false;
-                        mod.scrollBottomFlag = true
-                    }, 1500);
+                  }, 1500);
                 }
-              })
+              });
         }, 1500);
     },
     scrollRefresh(mod, scrollList) {

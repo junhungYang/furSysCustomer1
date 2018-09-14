@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path: "/",
-      component: userInfo
+      component: signUp
     },
     {
       path: "/userInfo",

@@ -46,11 +46,11 @@
                             </span>
                         </li>
                     </ul>
-                    <div class="desc-footer" @click="routerToSignUp">
+                    <!-- <div class="desc-footer" @click="routerToSignUp">
                         <span>
                             点击修改个人资料 >
                         </span>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="QR-code">
                     <img :src="userInfoData.qr_code_url" alt="">
@@ -87,13 +87,17 @@ import BScroll from 'better-scroll'
 import Vue from 'vue'
 import waterfull from '../plugin/waterfullApi'
 import router from '../router/index'
+import {mapState} from 'vuex'
 export default {
     data() {
         return {
-            userInfoData: {},
+            // userInfoData: {},
             historyList: [],
             loadingFlag: false
         }
+    },
+    computed: {
+        ...mapState(['userInfoData'])
     },
     mounted() {
         this.scrollList = new BScroll(this.$refs.scrollWrap, {
@@ -104,7 +108,6 @@ export default {
     },
     created() {
         this.waterfullInit()
-        this.getUserInfo()
         this.getUserOrderList(1)
     },
     methods: {
@@ -119,9 +122,13 @@ export default {
             })
         },
         getUserOrderList(num) {
-            axios.post('/api/user/getUserOrderList', {
+            axios.post(`${domain.testUrl}user/getUserOrderList`, {
                 pageNumber: num,
                 pageSize: 10
+            },{
+                headers:{
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             }).then((res) => {
                 this.historyList = res.data.data.list
                 console.log(this.historyList)

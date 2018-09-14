@@ -22,6 +22,15 @@ export default {
   },
   computed:{
     ...mapState(['districtList'])
+  },
+  methods: {
+    ...mapMutations(['changeDistric'])
+  },
+  watch: {
+    value() {
+      let arr = this.value.split('-')
+      this.changeDistric(arr)
+    }
   }
 }
 </script>

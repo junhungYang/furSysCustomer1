@@ -30,7 +30,7 @@ export default {
       })
     },
     getDealerData(cityId) {
-      axios.get(`${domain.testUrl}dealer/getDealerList?cityId=99`).then((res) => {
+      axios.get(`${domain.testUrl}dealer/getDealerList?cityId=${this.cityId}`).then((res) => {
         if(res.data.code === 0) {
           this.dealerListInit(res.data.data)
         }
