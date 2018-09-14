@@ -118,7 +118,8 @@ export default {
                     router.push({ path: '/userInfo' })
                 } else if (res.data.code === -1) {
                     alert(res.data.msg);
-                } else if (res.data.code === 10101) {
+                } 
+                else if (res.data.code === 10101) {
                     location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })

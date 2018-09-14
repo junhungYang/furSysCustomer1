@@ -108,6 +108,7 @@ export default {
     },
     created() {
         this.waterfullInit()
+        this.getUserInfo()
         this.getUserOrderList(1)
     },
     methods: {
@@ -115,7 +116,7 @@ export default {
             router.push({name:'signUp',params: { remark: '修改资料' }})
         },
         getUserInfo() {
-            axios.post('/api/user/getUserInfo').then((res) => {
+            axios.post(`${domain.testUrl}user/getUserInfo`).then((res) => {
                 if (res.data.code === 0) {
                     this.userInfoData = res.data.data
                 }
