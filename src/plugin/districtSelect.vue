@@ -30,6 +30,9 @@ export default {
     value() {
       let arr = this.value.split('-')
       this.changeDistric(arr)
+    },
+    districtList() {
+      console.log(this.districtList)
     }
   }
 }

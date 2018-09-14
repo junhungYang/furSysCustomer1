@@ -43,6 +43,7 @@ export const store = new Vuex.Store({
              });
            },
            districtListInit(state, payload) {
+             state.districtList = []
              payload.forEach(item => {
                state.districtList.push({
                  value: `${item.id}-${item.name}`,
