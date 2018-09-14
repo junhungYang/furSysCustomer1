@@ -20,11 +20,7 @@ import {mapState,mapMutations} from 'vuex'
       }
     },
     created() {
-        //异常请求回来的是国家信息
-        axios.get(`${domain.testUrl}dealer/findListByLv`, {
-        lv: 1,
-        pid: 1
-        }).then((res) => {
+        axios.get(`${domain.testUrl}dealer/findListByLv?lv=1&pid=1`).then((res) => {
         if (res.data.code === 0) {
             let district = res.data.data
             district.forEach((item) => {
@@ -37,18 +33,16 @@ import {mapState,mapMutations} from 'vuex'
         })
     },
     methods: {
-        ...mapMutations(['changeProvince','cityListInit']),
-        getCityData(cityId) {
-          axios.get(`${domain.testUrl}dealer/findListByLv`,{
-            lv:2,
-            pid:cityId
-          }).then((res) => {
+        ...mapMutations(['changeProvince','cityListInit','geographicInit']),
+        getCityData(provicId) {
+          axios.get(`${domain.testUrl}dealer/findListByLv?lv=2&pid=${provicId}`).then((res) => {
             this.cityListInit(res.data.data)
           })
         }
     },
     watch: {
         value() {
+          this.geographicInit()
             let arr = this.value.split('-')
             this.changeProvince(arr)
             this.getCityData(arr[0])

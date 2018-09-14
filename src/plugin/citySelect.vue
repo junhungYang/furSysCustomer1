@@ -1,7 +1,7 @@
 <template>
   <el-select v-model="value" placeholder="请选择" size="mini">
     <el-option
-      v-for="item in options"
+      v-for="item in cityList"
       :key="item.value"
       :label="item.label"
       :value="item.value">
@@ -15,40 +15,33 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
-      options: [],
+      // options: [],
       value: ''
     }
   },
   computed: {
     ...mapState(['cityList'])
   },
-  created() {
-    axios.get(`${domain.testUrl}dealer/findListByLv`, {
-      lv: 2,
-      pid: this.provinceId
-    }).then((res) => {
-      console.log(res.data.data)
-      if (res.data.code === 0) {
-        let district = res.data.data
-        district.forEach((item) => {
-          this.options.push({
-            value: `${item.id}-${item.name}`,
-            label: item.name
-          })
-        })
-      }
-    })
-  },
   methods: {
-    ...mapMutations(['changeCity'])
+    ...mapMutations(['changeCity','districtListInit','dealerListInit']),
+    getDistrictData(cityId) {
+      axios.get(`${domain.testUrl}dealer/findListByLv?lv=3&pid=${cityId}`).then((res) => {
+        this.districtListInit(res.data.data)
+      })
+    },
+    getDealerData(cityId) {
+      axios.get(`${domain.testUrl}dealer/getDealerList?cityId=99`).then((res) => {
+        if(res.data.code === 0) {
+          this.dealerListInit(res.data.data)
+        }
+      })
+    }
   },
   watch: {
     value() {
-      let arr = this.value.split('-')
-      this.changeCity(arr)
-    },
-    cityList() {
-      // this.
+      this.changeCity(this.value)
+      this.getDistrictData(this.value)
+      this.getDealerData(this.value)
     }
   }
 }
