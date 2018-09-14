@@ -56,7 +56,7 @@
                     <img :src="userInfoData.qr_code_url" alt="">
                 </div>
             </div>
-            <div class="footer">出示上面二维码于电源可进行下单</div>
+            <div class="footer">出示上面二维码于店员可进行下单</div>
         </div>
         <div class="signle-record">
             <div class="title">下单记录</div>

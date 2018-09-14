@@ -8,6 +8,7 @@
 // import wx from 'weixin-js-sdk'
 import axios from 'axios'
 import router from './router'
+import dealerSelect from './plugin/dealerSelect'
 export default {
   created() {
     // axios.get('/vipSystem/userInfo').then(res => {
@@ -16,7 +17,7 @@ export default {
     //     data.hasData ? router.push('userInfo') : router.push('signup')
     //   }
     // })
-  }
+  },
 }
 </script>
 
