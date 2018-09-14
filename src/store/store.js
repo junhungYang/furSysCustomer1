@@ -5,10 +5,15 @@ export const store = new Vuex.Store({
          state: {
            provinceId: "",
            provinceName: "",
+           cityName:"",
            cityId: "",
+           districtName: "",
            cityList: [],
            districtList: [],
-           dealerList: []
+           dealerList: [],
+           nickName:'',
+           mySex:'',
+           phoneNum:''
          },
          mutations: {
            changeProvince(state, payload) {
@@ -16,12 +21,13 @@ export const store = new Vuex.Store({
              state.provinceName = payload[1];
            },
            changeCity(state, payload) {
-             state.cityId = payload;
+             state.cityId = payload[0];
+             state.cityName = payload[1];
            },
            cityListInit(state, payload) {
              payload.forEach(item => {
                state.cityList.push({
-                 value: item.id,
+                 value: `${item.id}-${item.name}`,
                  label: item.name
                });
              });
@@ -40,7 +46,12 @@ export const store = new Vuex.Store({
              state.dealerList = []
            },
            dealerListInit(state,payload) {
-            state.dealerList = payload
+             payload.forEach(item => {
+               state.dealerList.push({
+                 value: item.id,
+                 label: item.name
+               });
+             });
            }
          }
        });

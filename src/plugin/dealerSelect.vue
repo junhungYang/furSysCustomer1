@@ -1,11 +1,12 @@
 <template>
     <div class="dealer-select">
         <div>
-            <input type="text" v-model="value" @click="listShowState = !listShowState">
+            <input type="text" v-model="value" @click.stop="listShowState = true">
+            <img class="icon" src="/static/img/下拉@2x.png">
         </div>
         <div class="scrollWrap" ref="scrollWrap" v-show="listShowState">
             <ul>
-                <li v-for="item in 8" @click="value = '你好'">你好</li>
+                <li v-for="item in dealerList" @click.stop="changeValue(item.label)">{{item.label}}</li>
             </ul>
         </div>
     </div>
@@ -13,12 +14,21 @@
 <script>
 import BScroll from 'better-scroll'
 import Vue from 'vue'
+import {mapState} from 'vuex'
 export default {
     data() {
         return {
             listShowState:false,
-            dealerList:[],
             value:''
+        }
+    },
+    computed: {
+        ...mapState(['dealerList'])
+    },
+    methods: {
+        changeValue(value) {
+            this.listShowState = false
+            this.value = value
         }
     },
     mounted() {
@@ -46,11 +56,11 @@ export default {
 
 <style lang="less">
 .dealer-select {
-    width: 300px;
-    height: 50px;
-    background:#ccc;
+    flex:1;
+    height: 100%;
     div:nth-of-type(1) {
         height:100%;
+        position: relative;
         input {
             padding: 0 13px;
             display: block;
@@ -59,19 +69,32 @@ export default {
             border: 0;
             outline: none;
             background:transparent;
+            color:#353535;
+        }
+        .icon {
+            position: absolute;
+            right: 10px;
+            top:50%;
+            transform: translateY(-50%)
         }
     }
     .scrollWrap {
-        height: 250px;
-        background:#ddd;
+        max-height: 250px;
+        background:#fff;
         padding: 0 13px;
         overflow: hidden;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.137);
+        border-radius: 10px;
         ul {
             li {
                 height: 40px;
                 border-bottom: 1px solid #ddd;
                 line-height:40px;
                 font-size: 13px;
+                color:#353535;
+            }
+            li:last-of-type {
+                border: 0;
             }
         }
     }

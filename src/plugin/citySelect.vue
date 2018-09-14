@@ -15,17 +15,17 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
-      // options: [],
       value: ''
     }
   },
   computed: {
-    ...mapState(['cityList'])
+    ...mapState(['cityList','cityId'])
   },
   methods: {
     ...mapMutations(['changeCity','districtListInit','dealerListInit']),
-    getDistrictData(cityId) {
-      axios.get(`${domain.testUrl}dealer/findListByLv?lv=3&pid=${cityId}`).then((res) => {
+    getDistrictData() {
+      console.log(this.cityId)
+      axios.get(`${domain.testUrl}dealer/findListByLv?lv=3&pid=${this.cityId}`).then((res) => {
         this.districtListInit(res.data.data)
       })
     },
@@ -39,7 +39,8 @@ export default {
   },
   watch: {
     value() {
-      this.changeCity(this.value)
+      let arr = this.value.split('-')
+      this.changeCity(arr)
       this.getDistrictData(this.value)
       this.getDealerData(this.value)
     }

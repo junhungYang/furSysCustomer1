@@ -70,15 +70,17 @@
                     <div class="line">
                         <span></span>
                     </div>
-                    <div class="cont">
-                        <input type="text" placeholder="请选择您的注册门店">
+                    <div class="cont dealer-select">
+                        <dealerSelect></dealerSelect>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="btn">
-            <button>
-                <router-link tag="div" to="userInfo" >{{btnText}}</router-link>
+            <button @click="signUp">
+                <!-- <router-link tag="div" to="userInfo" @click=""> -->
+                    {{btnText}}
+                <!-- </router-link> -->
             </button>
         </div>
     </div>
@@ -88,6 +90,8 @@ import axios from 'axios'
 import citySelect from '../plugin/citySelect'
 import districtSelect from '../plugin/districtSelect'
 import proviceSelect from '../plugin/proviceSelect'
+import dealerSelect from '../plugin/dealerSelect'
+import {mapState} from 'vuex'
 export default {
     data() {
         return {
@@ -95,31 +99,33 @@ export default {
             btnText:'成为会员',
             nickName:'',
             phoneNum:'',
-            placeholders: {
-                province: '------- 省 --------',
-                city: '--- 市 ---',
-                area: '--- 区 ---',
-            },
-            province:[],
-            city:[],
-            district:[]
         }
+    },
+    computed: {
+        ...mapState(['provinceName','cityName','districtName','dealerId'])
     },
     created() {
         if(this.$route.params.remark) {
             this.btnText = '确认修改'
         }
-        this.getPosition()
     },
     methods: {
-        getPosition() {
-            
+        signUp() {
+            console.log(this.provinceName,this.cityName)
+            let obj = {
+                mobile:this.phoneNum,
+                // province,
+                // city,
+                // region,
+                // dealerId
+            }
         }
     },
     components: {
         citySelect,
         districtSelect,
-        proviceSelect
+        proviceSelect,
+        dealerSelect
     }
 }
 </script>
