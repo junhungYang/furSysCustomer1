@@ -17,6 +17,11 @@
                 </div>
             </div>
         </header>
+        <div class="game" v-show="userLevel === 2 ? true :false" @click="jumpToGame">
+            <span>高级会员福利: </span>
+            <span>(第20180915 - 20181015期)玩游戏赢代金券</span>
+            <img src="/static/img/更改@2x.png" alt="">
+        </div>
         <div class="my-msg">
             <div class="msg-wrap">
                 <div class="desc">
@@ -87,13 +92,13 @@ import BScroll from 'better-scroll'
 import Vue from 'vue'
 import waterfull from '../plugin/waterfullApi'
 import router from '../router/index'
-import {mapState} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
     data() {
         return {
-            // userInfoData: {},
             historyList: [],
-            loadingFlag: false
+            loadingFlag: false,
+            userLevel:''
         }
     },
     computed: {
@@ -112,13 +117,20 @@ export default {
         this.getUserOrderList(1)
     },
     methods: {
+        ...mapMutations(['userInfoInit']),
+        jumpToGame() {
+            location.assign('https://hd.faisco.cn/14539784/LlDzcNHl_09FsbTPxatFNw/load.html?style=21')
+        },
         routerToSignUp() {
-            router.push({name:'signUp',params: { remark: '修改资料' }})
+            router.push({ name: 'signUp', params: { remark: '修改资料' } })
         },
         getUserInfo() {
             axios.post(`${domain.testUrl}user/getUserInfo`).then((res) => {
                 if (res.data.code === 0) {
-                    this.userInfoData = res.data.data
+                    if(res.data.data.level_id === 2) {
+                        this.userLevel = 2
+                    }
+                    this.userInfoInit(res.data.data)
                 }
             })
         },
@@ -126,15 +138,15 @@ export default {
             axios.post(`${domain.testUrl}user/getUserOrderList`, {
                 pageNumber: num,
                 pageSize: 10
-            },{
-                headers:{
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then((res) => {
-                this.historyList = res.data.data.list
-                console.log(this.historyList)
-                this.scrollRefresh()
-            })
+            }, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then((res) => {
+                    this.historyList = res.data.data.list
+                    console.log(this.historyList)
+                    this.scrollRefresh()
+                })
         },
         waterfullInit() {
             waterfull.propInit(this)
@@ -208,6 +220,21 @@ export default {
       }
     }
   }
+    .game {
+        height: 40px;
+        border-bottom:1px solid #ddd;
+        font-size: 13px;
+        line-height: 40px;
+        color:#353535;
+        background:#fff;
+        padding-left: 13px;
+        span:nth-of-type(2) {
+            white-space:nowrap ; overflow: hidden;text-overflow: ellipsis
+        }
+        span:nth-of-type(1) {
+            color:#c59a68;
+        }
+    }
   .my-msg {
     background: #fff;
     border-bottom-left-radius: 15px;

@@ -59,7 +59,7 @@
                     <div class="cont position-wrap">
                         <div class="select"><proviceSelect></proviceSelect></div>
                         <div class="select"><citySelect></citySelect></div>
-                        <div class="select"><districtSelect></districtSelect></div>
+                        <!-- <div class="select"><districtSelect></districtSelect></div> -->
                     </div>
                 </li>
                 <li>
