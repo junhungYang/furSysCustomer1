@@ -98,7 +98,7 @@ export default {
         return {
             historyList: [],
             loadingFlag: false,
-            userLevel:''
+            userLevel: ''
         }
     },
     computed: {
@@ -118,22 +118,25 @@ export default {
     },
     methods: {
         ...mapMutations(['userInfoInit']),
+        //vip等级为2的用户可参与游戏
         jumpToGame() {
             location.assign('https://hd.faisco.cn/14539784/LlDzcNHl_09FsbTPxatFNw/load.html?style=21')
         },
         routerToSignUp() {
             router.push({ name: 'signUp', params: { remark: '修改资料' } })
         },
+        //获取用户信息并初始化在store中的用户信息
         getUserInfo() {
             axios.post(`${domain.testUrl}user/getUserInfo`).then((res) => {
                 if (res.data.code === 0) {
-                    if(res.data.data.level_id === 2) {
+                    if (res.data.data.level_id === 2) {
                         this.userLevel = 2
                     }
                     this.userInfoInit(res.data.data)
                 }
             })
         },
+        //瀑布流获取用户购买记录
         getUserOrderList(num) {
             axios.post(`${domain.testUrl}user/getUserOrderList`, {
                 pageNumber: num,
@@ -143,14 +146,17 @@ export default {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
                 }).then((res) => {
-                    this.historyList = res.data.data.list
-                    console.log(this.historyList)
-                    this.scrollRefresh()
+                    if(res.data.code === 0) {
+                        this.historyList = res.data.data.list
+                        this.scrollRefresh()
+                    }
                 })
         },
+        //初始化瀑布流必备属性
         waterfullInit() {
             waterfull.propInit(this)
         },
+        //当重新获取信息后更新scroll
         scrollRefresh() {
             Vue.nextTick(() => {
                 this.scrollList.refresh()
@@ -220,21 +226,23 @@ export default {
       }
     }
   }
-    .game {
-        height: 40px;
-        border-bottom:1px solid #ddd;
-        font-size: 13px;
-        line-height: 40px;
-        color:#353535;
-        background:#fff;
-        padding-left: 13px;
-        span:nth-of-type(2) {
-            white-space:nowrap ; overflow: hidden;text-overflow: ellipsis
-        }
-        span:nth-of-type(1) {
-            color:#c59a68;
-        }
+  .game {
+    height: 40px;
+    border-bottom: 1px solid #ddd;
+    font-size: 13px;
+    line-height: 40px;
+    color: #353535;
+    background: #fff;
+    padding-left: 13px;
+    span:nth-of-type(2) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    span:nth-of-type(1) {
+      color: #c59a68;
+    }
+  }
   .my-msg {
     background: #fff;
     border-bottom-left-radius: 15px;

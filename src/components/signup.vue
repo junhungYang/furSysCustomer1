@@ -57,8 +57,10 @@
                         <span></span>
                     </div>
                     <div class="cont position-wrap">
-                        <div class="select"><proviceSelect></proviceSelect></div>
-                        <div class="select"><citySelect></citySelect></div>
+                        <!-- <div class="select"><proviceSelect></proviceSelect></div> -->
+                        <proviceSelect1></proviceSelect1>
+                        <!-- <proviceSelect1></proviceSelect1> -->
+                        <!-- <div class="select"><citySelect></citySelect></div> -->
                         <!-- <div class="select"><districtSelect></districtSelect></div> -->
                     </div>
                 </li>
@@ -91,6 +93,7 @@ import proviceSelect from '../plugin/proviceSelect'
 import dealerSelect from '../plugin/dealerSelect'
 import { mapState, mapMutations } from 'vuex'
 import router from '../router'
+import proviceSelect1 from '../plugin/proviceSelect1'
 export default {
     data() {
         return {
@@ -129,7 +132,8 @@ export default {
         citySelect,
         districtSelect,
         proviceSelect,
-        dealerSelect
+        dealerSelect,
+        proviceSelect1
     }
 }
 </script>
@@ -182,10 +186,8 @@ export default {
           }
         }
         .position-wrap {
-          .select {
-            display: inline-block;
-            //   position: absolute;
-          }
+          display: flex;
+          flex: 1;
         }
         .cont {
           flex: 1;

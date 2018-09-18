@@ -35,12 +35,14 @@ export const store = new Vuex.Store({
              state.dealerId = payload
            },
            cityListInit(state, payload) {
+             state.cityList = []
              payload.forEach(item => {
                state.cityList.push({
-                 value: `${item.id}-${item.name}`,
+                 id: item.id,
                  label: item.name
                });
              });
+             console.log(state.cityList)
            },
            districtListInit(state, payload) {
              state.districtList = []
