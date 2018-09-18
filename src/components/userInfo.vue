@@ -182,6 +182,7 @@ export default {
   background: #f5f5f5;
   header {
     height: 150px;
+    width: 100%;
     background: rgb(0, 0, 0);
     display: flex;
     .brand {
@@ -201,11 +202,16 @@ export default {
         margin-top: 10px;
         transform-origin: left;
       }
+      @media screen and (max-width:340px) {
+          .desc {
+              position: absolute;
+              margin-left: 44px;
+          }
+      }
     }
     .proPic {
-      // width:130px;
+      width:130px !important;
       margin-top: 20px;
-      margin-right: 13px;
       .picture {
         margin-left: 10px;
         width: 77px;
@@ -281,6 +287,13 @@ export default {
               overflow: hidden;
               text-overflow: ellipsis;
             }
+          }
+          @media screen  and (max-width:340px){
+              li {
+                  span:nth-of-type(2) {
+                      width: 110px;
+                  }
+              }
           }
         }
         .desc-footer {
