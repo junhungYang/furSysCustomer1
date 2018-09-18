@@ -1,14 +1,14 @@
 <template>
     <div class="sign-up">
         <header>请填写资料</header>
-        <div class="btn">
+        <div class="btn" :class="btnText !== '确认修改' ? 'btn-margin' : ''">
             <button @click="signUp">
                     {{btnText}}
             </button>
         </div>
         <div class="signup-msg">
             <ul>
-                <li>
+                <li v-show="btnText !== '确认修改'">
                     <div class="title">
                         <span class="icon"></span>  
                         <span class="desc">姓名</span>
@@ -17,10 +17,10 @@
                         <span></span>
                     </div>
                     <div class="cont">
-                        <input type="text" placeholder="请输入您的姓氏" class="text" v-model="nickName">
+                        <input type="text" placeholder="请输入您的姓名" class="text" v-model="nickName">
                     </div>
                 </li>
-                <li>
+                <li v-show="btnText !== '确认修改'">
                     <div class="title">
                         <span class="icon"></span>
                         <span class="desc">性别</span>
@@ -53,7 +53,7 @@
                         <input type="text" placeholder="请输入您的联系电话" class="text" v-model="phoneNum">
                     </div>
                 </li>
-                <li>
+                <li v-show="btnText !== '确认修改'">
                     <div class="title">
                         <span class="icon"></span>
                         <span class="desc">注册门店</span>
@@ -65,7 +65,7 @@
                         <dealerSelect></dealerSelect>
                     </div>
                 </li>
-                <li>
+                <li :class="btnText !== '确认修改' ? 'marginTop' : ''">
                     <div class="title">
                         <span class="icon"></span>
                         <span class="desc">居住地区</span>
@@ -74,11 +74,7 @@
                         <span></span>
                     </div>
                     <div class="cont position-wrap">
-                        <!-- <div class="select"><proviceSelect></proviceSelect></div> -->
                         <proviceSelect1></proviceSelect1>
-                        <!-- <proviceSelect1></proviceSelect1> -->
-                        <!-- <div class="select"><citySelect></citySelect></div> -->
-                        <!-- <div class="select"><districtSelect></districtSelect></div> -->
                     </div>
                 </li>
             </ul>
@@ -104,6 +100,7 @@ export default {
         ...mapState(['provinceName', 'cityName', 'districtName', 'dealerId'])
     },
     created() {
+        console.log(this.$route.params.remark)
         if (this.$route.params.remark) {
             this.btnText = '确认修改'
         }
@@ -111,6 +108,13 @@ export default {
     methods: {
         ...mapMutations(['userInfoInit']),
         signUp() {
+            if(this.btnText === '成为会员') {
+                this.register()
+            }else if (this.btnText === '确认修改') {
+                this.changeInfo()
+            }
+        },
+        register() {
             let str = `name=${this.nickName}&gender=${this.mySex}&mobile=${this.phoneNum}&province=${this.provinceName}&city=${this.cityName}&dealerId=${this.dealerId}`
             axios.get(`${domain.testUrl}user/register?${str}`).then((res) => {
                 if (res.data.code === 0) {
@@ -122,6 +126,18 @@ export default {
                     location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
+        },
+        changeInfo() {
+            let str = `mobile=${this.phoneNum}&province=${this.provinceName}&city=${this.cityNam}`
+            axios.get(`${domain.testUrl}user/updateUserInfo?${str}`).then((res => {
+                if(res.data.code === 0) {
+                    router.push({path:'userInfo'})
+                } else if(res.data.code === -1) {
+                    alert(res.data.msg)
+                } else if(res.data.code === 10101) {
+                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                }
+            }))
         }
     },
     components: {
@@ -238,7 +254,7 @@ export default {
       li:nth-of-type(5) .title .icon {
         background: url("/static/img/5@2x.png");
       }
-      li:nth-of-type(5) {
+      .marginTop {
           z-index: 99;
           position: absolute;
           top: 150px;
@@ -252,7 +268,7 @@ export default {
   }
   .btn {
     height: 34px;
-    margin-top: 295px;
+    margin-top: 150px;
     color: #fff;
     button {
       display: block;
@@ -273,18 +289,8 @@ export default {
       }
     }
   }
-}
-// sign-up.el-cascader{
-//    background: red;
-// }
-.distpicker-address-wrapper {
-  width: 100px !important;
-  // .sheng {
-  //     width: 100px !important;
-  // }
-  overflow: hidden;
-  select:nth-of-type(1) {
-    display: inline !important;
+  .btn-margin {
+      margin-top: 295px;
   }
 }
 </style>

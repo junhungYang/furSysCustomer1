@@ -51,11 +51,11 @@
                             </span>
                         </li>
                     </ul>
-                    <!-- <div class="desc-footer" @click="routerToSignUp">
+                    <div class="desc-footer" @click="routerToSignUp">
                         <span>
                             点击修改个人资料 >
                         </span>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="QR-code">
                     <img :src="userInfoData.qr_code_url" alt="">
@@ -136,7 +136,7 @@ export default {
                 }else if(res.data.code === -1) {
                     alert(res.data.msg)
                 }else if(res.data.code === 10101) {
-                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                    // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
         },
@@ -156,7 +156,7 @@ export default {
                     }else if(res.data.code === -1) {
                         alert(res.data.msg)
                     }else if(res.data.code === 10101) {
-                        location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                        // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                     }
                 })
         },

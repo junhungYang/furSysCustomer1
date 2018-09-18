@@ -46,6 +46,10 @@ export default {
             })
             this.proScrollRefresh()
             this.cityScrollRefresh()
+        }else if(res.data.code === -1) {
+            alert(res.data.msg)
+        }else if(res.data.code === 10101) {
+            location.assign('http://qinqing.ydcycloud.com/user/toOauth')
         }
         })
     },
@@ -78,14 +82,21 @@ export default {
             axios.get(`${domain.testUrl}dealer/getDealerList?cityId=${id}`).then((res) => {
                 if(res.data.code === 0) {
                 this.dealerListInit(res.data.data)
+                }else if(res.data.code === -1) {
+                    alert(res.data.msg)
+                }else if(res.data.code === 10101) {
+                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
         },
         getCityData(id) {
-            console.log(id)
             axios.get(`${domain.testUrl}dealer/findListByLv?lv=2&pid=${id}`).then((res) => {
                 if(res.data.code === 0) {
                     this.cityListInit(res.data.data)
+                }else if(res.data.code === -1) {
+                    alert(res.data.msg)
+                }else if(res.data.code === 10101) {
+                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
         },
