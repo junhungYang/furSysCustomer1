@@ -151,6 +151,7 @@ export default {
 .sign-up {
   height: 100%;
   position: relative;
+  background:#fff;
   header {
     height: 50px;
     text-align: center;
@@ -212,6 +213,7 @@ export default {
             height: ~"calc(100% - 5px)";
             width: 70%;
             outline: none;
+            background:transparent;
           }
           .sex {
             height: 100%;
