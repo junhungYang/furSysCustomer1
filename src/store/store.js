@@ -24,7 +24,6 @@ export const store = new Vuex.Store({
              state.provinceName = payload[1];
            },
            changeCity(state, payload) {
-             console.log(payload)
              state.cityId = payload[0];
              state.cityName = payload[1];
            },
