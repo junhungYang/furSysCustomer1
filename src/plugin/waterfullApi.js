@@ -24,19 +24,10 @@ const waterfullApi = {
         this.scrollRefresh(mod, scrollList)
         //为了模拟loading效果，暂时使用延时，真正上线时应取消
         setTimeout(() => {
-            axios
-              .post(`${domain.testUrl}user/getUserOrderList`, {
-                pageNumber: this.waterfullIndex,
-                pageSize: 10
-              },{
-                  headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded'
-                  } 
-              })
-              .then(res => {
+            let str = `pageNumber=${this.waterfullIndex}&pageSize=10`
+            axios.get(`${domain.testUrl}user/getUserOrderList?${str}`).then(res => {
                 if (res.data.code === 0) {
-                    console.log(res.data.data)
-                  mod.historyList = mod.historyList.concat(res.data.data.list);
+                  mod.historyList = res.data.data.list;
                   this.scrollRefresh(mod, scrollList);
                   mod.loadingState = "loading...";
                   mod.loadingFlag = false;
@@ -49,7 +40,7 @@ const waterfullApi = {
                   }, 1500);
                   alert(res.data.msg)
                 }else if (res.data.code === 10101) {
-                     // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                     location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
               });
         }, 1500);

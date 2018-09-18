@@ -136,29 +136,23 @@ export default {
                 }else if(res.data.code === -1) {
                     alert(res.data.msg)
                 }else if(res.data.code === 10101) {
-                    // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
         },
         //瀑布流获取用户购买记录
         getUserOrderList(num) {
-            axios.post(`${domain.testUrl}user/getUserOrderList`, {
-                pageNumber: num,
-                pageSize: 10
-            }, {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }).then((res) => {
-                    if(res.data.code === 0) {
+            let str = `pageNumber=${num}&pageSize=10`
+            axios.get(`${domain.testUrl}user/getUserOrderList?${str}`).then(res => {
+                if(res.data.code === 0) {
                         this.historyList = res.data.data.list
                         this.scrollRefresh()
                     }else if(res.data.code === -1) {
                         alert(res.data.msg)
                     }else if(res.data.code === 10101) {
-                        // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                        location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                     }
-                })
+            })
         },
         //初始化瀑布流必备属性
         waterfullInit() {
