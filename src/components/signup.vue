@@ -1,6 +1,11 @@
 <template>
     <div class="sign-up">
         <header>请填写资料</header>
+        <div class="btn">
+            <button @click="signUp">
+                    {{btnText}}
+            </button>
+        </div>
         <div class="signup-msg">
             <ul>
                 <li>
@@ -51,6 +56,18 @@
                 <li>
                     <div class="title">
                         <span class="icon"></span>
+                        <span class="desc">注册门店</span>
+                    </div>
+                    <div class="line">
+                        <span></span>
+                    </div>
+                    <div class="cont dealer-select">
+                        <dealerSelect></dealerSelect>
+                    </div>
+                </li>
+                <li>
+                    <div class="title">
+                        <span class="icon"></span>
                         <span class="desc">居住地区</span>
                     </div>
                     <div class="line">
@@ -64,32 +81,12 @@
                         <!-- <div class="select"><districtSelect></districtSelect></div> -->
                     </div>
                 </li>
-                <li>
-                    <div class="title">
-                        <span class="icon"></span>
-                        <span class="desc">注册门店</span>
-                    </div>
-                    <div class="line">
-                        <span></span>
-                    </div>
-                    <div class="cont dealer-select">
-                        <dealerSelect></dealerSelect>
-                    </div>
-                </li>
             </ul>
-        </div>
-        <div class="btn">
-            <button @click="signUp">
-                    {{btnText}}
-            </button>
         </div>
     </div>
 </template>
 <script>
 import axios from 'axios'
-import citySelect from '../plugin/citySelect'
-import districtSelect from '../plugin/districtSelect'
-import proviceSelect from '../plugin/proviceSelect'
 import dealerSelect from '../plugin/dealerSelect'
 import { mapState, mapMutations } from 'vuex'
 import router from '../router'
@@ -114,11 +111,10 @@ export default {
     methods: {
         ...mapMutations(['userInfoInit']),
         signUp() {
-            let str = `name=${this.nickName}&gender=${this.mySex}&mobile=${this.phoneNum}&province=${this.provinceName}&city=${this.cityName}&region=${this.districtName}&dealerId=${this.dealerId}`
+            let str = `name=${this.nickName}&gender=${this.mySex}&mobile=${this.phoneNum}&province=${this.provinceName}&city=${this.cityName}&dealerId=${this.dealerId}`
             axios.get(`${domain.testUrl}user/register?${str}`).then((res) => {
                 if (res.data.code === 0) {
                     this.userInfoInit(res.data.data)
-                    router.push({ path: '/userInfo' })
                 } else if (res.data.code === -1) {
                     alert(res.data.msg);
                 } 
@@ -129,9 +125,6 @@ export default {
         }
     },
     components: {
-        citySelect,
-        districtSelect,
-        proviceSelect,
         dealerSelect,
         proviceSelect1
     }
@@ -141,6 +134,7 @@ export default {
 <style lang="less" scoped>
 .sign-up {
   height: 100%;
+  position: relative;
   header {
     height: 50px;
     text-align: center;
@@ -150,8 +144,13 @@ export default {
     background: #c59a68;
   }
   .signup-msg {
+      position: absolute;
+      left: 0;
+      top: 50px;
+      right: 0;
     ul {
       margin: 0 13px;
+      position: relative;
       li {
         height: 50px;
         border-bottom: 1px solid #e8e8e8;
@@ -239,11 +238,21 @@ export default {
       li:nth-of-type(5) .title .icon {
         background: url("/static/img/5@2x.png");
       }
+      li:nth-of-type(5) {
+          z-index: 99;
+          position: absolute;
+          top: 150px;
+          left:0;
+          right:0;
+      }
+      li:nth-of-type(4) {
+          margin-top: 50px;
+      }
     }
   }
   .btn {
     height: 34px;
-    margin-top: 34px;
+    margin-top: 295px;
     color: #fff;
     button {
       display: block;

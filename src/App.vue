@@ -26,5 +26,9 @@ export default {
 #app {
   width: 100%;
   height: 100vh;
+  max-width: 450px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%)
 }
 </style>

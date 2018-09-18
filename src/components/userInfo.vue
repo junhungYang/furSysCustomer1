@@ -133,6 +133,10 @@ export default {
                         this.userLevel = 2
                     }
                     this.userInfoInit(res.data.data)
+                }else if(res.data.code === -1) {
+                    alert(res.data.msg)
+                }else if(res.data.code === 10101) {
+                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
         },
@@ -149,6 +153,10 @@ export default {
                     if(res.data.code === 0) {
                         this.historyList = res.data.data.list
                         this.scrollRefresh()
+                    }else if(res.data.code === -1) {
+                        alert(res.data.msg)
+                    }else if(res.data.code === 10101) {
+                        location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                     }
                 })
         },

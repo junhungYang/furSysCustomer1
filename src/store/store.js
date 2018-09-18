@@ -16,7 +16,7 @@ export const store = new Vuex.Store({
            nickName:'',
            mySex:'',
            phoneNum:'',
-           userInfoData:{}
+           userInfoData:{},
          },
          mutations: {
            changeProvince(state, payload) {
@@ -24,6 +24,7 @@ export const store = new Vuex.Store({
              state.provinceName = payload[1];
            },
            changeCity(state, payload) {
+             console.log(payload)
              state.cityId = payload[0];
              state.cityName = payload[1];
            },
@@ -42,7 +43,6 @@ export const store = new Vuex.Store({
                  label: item.name
                });
              });
-             console.log(state.cityList)
            },
            districtListInit(state, payload) {
              state.districtList = []

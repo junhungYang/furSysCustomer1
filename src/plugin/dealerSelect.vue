@@ -1,7 +1,7 @@
 <template>
     <div class="dealer-select">
         <div>
-            <input type="text" v-model="value" @click.stop="listShowState = true">
+            <div class="input"  @click.stop="listShowState = true">{{value}}</div>
             <img class="icon" src="/static/img/下拉@2x.png">
         </div>
         <div class="scrollWrap" ref="scrollWrap" v-show="listShowState">
@@ -18,7 +18,7 @@ import {mapState,mapMutations} from 'vuex'
 export default {
     data() {
         return {
-            listShowState:true,
+            listShowState:false,
             value:''
         }
     },
@@ -67,18 +67,17 @@ export default {
 .dealer-select {
     flex:1;
     height: 100%;
-    position: relative;
         div:nth-of-type(1) {
         height:100%;
         position: relative;
-        input {
-            padding: 0 13px;
+        .input {
             display: block;
             width:100%;
             height: 100%;
             border: 0;
             outline: none;
             background:transparent;
+            font-size: 13px;
             color:#353535;
         }
         .icon {
@@ -89,7 +88,6 @@ export default {
         }
     }
     .scrollWrap {
-        position: absolute;
         max-height: 250px;
         background:#fff;
         padding: 0 13px;

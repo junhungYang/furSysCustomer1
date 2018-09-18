@@ -60,23 +60,23 @@ export default {
         })
     },
     methods: {
-        ...mapMutations(['cityListInit','dealerListInit']),
+        ...mapMutations(['cityListInit','dealerListInit','changeCity','changeProvince']),
         changeProValue(label,id) {
-            console.log(12346)
             this.province = label
             this.proListShowState = false
             this.cityListShowState = true
             this.getCityData(id)
+            this.changeProvince([id,label])
         },
         changeCityValue(label,id) {
             this.city = label
             this.cityListShowState = false
             this.getDealerData(id)
+            this.changeCity([id,label])
         },
         getDealerData(id) {
             axios.get(`${domain.testUrl}dealer/getDealerList?cityId=${id}`).then((res) => {
                 if(res.data.code === 0) {
-                    console.log(res.data.data)
                 this.dealerListInit(res.data.data)
                 }
             })
@@ -134,7 +134,7 @@ export default {
     }
     .scrollWrap {
         max-height: 250px;
-        background:red;
+        background:#fff;
         padding: 0 13px;
         overflow: hidden;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.137);
