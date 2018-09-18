@@ -119,7 +119,6 @@ export default {
             axios.get(`${domain.testUrl}user/register?${str}`).then((res) => {
                 if (res.data.code === 0) {
                     router.push({path: '/userInfo'})
-                    this.userInfoInit(res.data.data)
                 } else if (res.data.code === -1) {
                     alert(res.data.msg);
                 } 
