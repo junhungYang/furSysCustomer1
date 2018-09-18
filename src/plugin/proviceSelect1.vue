@@ -44,19 +44,25 @@ export default {
                   label:item.name
               })
             })
-            this.proScrollInit()
+            this.proScrollRefresh()
+            this.cityScrollRefresh()
         }
         })
     },
     mounted() {
-        this.scrollList = new BScroll(this.$refs.proScrollWrap,{
+        this.proScrollList = new BScroll(this.$refs.proScrollWrap,{
+            click:true,
+            probeType:3
+        })
+        this.cityScrollList = new BScroll(this.$refs.cityScrollWrap,{
             click:true,
             probeType:3
         })
     },
     methods: {
-        ...mapMutations(['cityListInit']),
+        ...mapMutations(['cityListInit','dealerListInit']),
         changeProValue(label,id) {
+            console.log(12346)
             this.province = label
             this.proListShowState = false
             this.cityListShowState = true
@@ -65,6 +71,15 @@ export default {
         changeCityValue(label,id) {
             this.city = label
             this.cityListShowState = false
+            this.getDealerData(id)
+        },
+        getDealerData(id) {
+            axios.get(`${domain.testUrl}dealer/getDealerList?cityId=${id}`).then((res) => {
+                if(res.data.code === 0) {
+                    console.log(res.data.data)
+                this.dealerListInit(res.data.data)
+                }
+            })
         },
         getCityData(id) {
             console.log(id)
@@ -74,8 +89,27 @@ export default {
                 }
             })
         },
-        proScrollInit() {
-            
+        cityScrollRefresh() {
+            Vue.nextTick(() => {
+                this.cityScrollList.refresh()
+            })
+        },
+        proScrollRefresh() {
+            Vue.nextTick(() => {
+                this.proScrollList.refresh()
+            })
+        }
+    },
+    watch: {
+        proListShowState() {
+            Vue.nextTick(() => {
+                this.proScrollList.refresh()
+            })
+        },
+        cityListShowState() {
+            Vue.nextTick(() => {
+                this.cityScrollList.refresh()
+            })
         }
     }
 }
@@ -89,6 +123,7 @@ export default {
             width: 100%;
             height: 50px;
             color:#353535;
+            font-size: 13px;
         }
         .icon {
             position: absolute;

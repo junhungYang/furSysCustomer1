@@ -65,6 +65,7 @@ export const store = new Vuex.Store({
                  label: item.name
                });
              });
+             console.log(state.dealerList)
            },
            userInfoInit(state,payload) {
              state.userInfoData = payload

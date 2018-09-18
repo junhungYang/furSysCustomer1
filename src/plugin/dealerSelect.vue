@@ -18,7 +18,7 @@ import {mapState,mapMutations} from 'vuex'
 export default {
     data() {
         return {
-            listShowState:false,
+            listShowState:true,
             value:''
         }
     },
@@ -67,7 +67,8 @@ export default {
 .dealer-select {
     flex:1;
     height: 100%;
-    div:nth-of-type(1) {
+    position: relative;
+        div:nth-of-type(1) {
         height:100%;
         position: relative;
         input {
@@ -88,6 +89,7 @@ export default {
         }
     }
     .scrollWrap {
+        position: absolute;
         max-height: 250px;
         background:#fff;
         padding: 0 13px;
