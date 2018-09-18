@@ -131,7 +131,7 @@ export default {
             let str = `mobile=${this.phoneNum}&province=${this.provinceName}&city=${this.cityNam}`
             axios.get(`${domain.testUrl}user/updateUserInfo?${str}`).then((res => {
                 if(res.data.code === 0) {
-                    router.push({path:'userInfo'})
+                    router.push({path: '/userInfo'})
                 } else if(res.data.code === -1) {
                     alert(res.data.msg)
                 } else if(res.data.code === 10101) {
