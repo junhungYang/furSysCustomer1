@@ -80,8 +80,9 @@
                             购买系列: <span>{{item.series_name}}</span>
                         </div>
                     </li>
-                    <div class="loading" v-show="loadingFlag">{{loadingState}}</div>
+                    <!-- <div class="loading" v-show="loadingFlag">{{loadingState}}</div> -->
                 </ul>
+                <div class="loading" v-show="loadingFlag"></div>
             </div>
         </div>
     </div>
@@ -90,7 +91,7 @@
 import axios from 'axios'
 import BScroll from 'better-scroll'
 import Vue from 'vue'
-import waterfull from '../plugin/waterfullApi'
+// import waterfull from '../plugin/waterfullApi'
 import router from '../router/index'
 import { mapState, mapMutations } from 'vuex'
 export default {
@@ -98,7 +99,9 @@ export default {
         return {
             historyList: [],
             loadingFlag: false,
-            userLevel: ''
+            userLevel: '',
+            pageIndex:1,
+            loadingFlag:true
         }
     },
     computed: {
@@ -107,12 +110,19 @@ export default {
     mounted() {
         this.scrollList = new BScroll(this.$refs.scrollWrap, {
             click: true,
-            probeType: 3
+            probeType: 3,
+            pullDownRefresh: {
+                threshold: 50,
+                stop: 0
+            },
+            pullUpLoad:true
         })
-        waterfull.scrollGetData(this, 'scrollWrap', 'scrollList', '/api/user/getUserOrderList')
+        // waterfull.scrollGetData(this, 'scrollWrap', 'scrollList', '/api/user/getUserOrderList')
+        this.scrollEventInit()
+
     },
     created() {
-        this.waterfullInit()
+        // this.waterfullInit()
         this.getUserInfo()
         this.getUserOrderList(1)
     },
@@ -136,13 +146,27 @@ export default {
                 }else if(res.data.code === -1) {
                     alert(res.data.msg)
                 }else if(res.data.code === 10101) {
-                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                    // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
+            })
+        },
+        scrollEventInit() {
+            this.scrollList.on('pullingDown',() => {
+                this.pageIndex--
+                this.pageIndex > 0 ? this.getUserOrderList() :　'';
+                this.scrollList.finishPullDown()
+            })
+            this.scrollList.on('pullingUp',pos => {
+                this.pageIndex ++
+                this.getUserOrderList()
+                this.scrollList.finishPullUp()
             })
         },
         //瀑布流获取用户购买记录
         getUserOrderList(num) {
-            let str = `pageNumber=${num}&pageSize=10`
+            console.log(this.pageIndex)
+            let str = `pageNumber=${this.pageIndex}&pageSize=10`
+            // /api/user/getUserOrderList
             axios.get(`${domain.testUrl}user/getUserOrderList?${str}`).then(res => {
                 if(res.data.code === 0) {
                         this.historyList = res.data.data.list
@@ -150,14 +174,15 @@ export default {
                     }else if(res.data.code === -1) {
                         alert(res.data.msg)
                     }else if(res.data.code === 10101) {
-                        location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                        // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                     }
             })
+            
         },
         //初始化瀑布流必备属性
-        waterfullInit() {
-            waterfull.propInit(this)
-        },
+        // waterfullInit() {
+        //     waterfull.propInit(this)
+        // },
         //当重新获取信息后更新scroll
         scrollRefresh() {
             Vue.nextTick(() => {
@@ -338,6 +363,7 @@ export default {
     .scrollWrap {
       overflow: hidden;
       flex: 1;
+      position: relative;
       ul {
         background: #fff;
         li {
@@ -376,6 +402,12 @@ export default {
           font-size: 12px;
         }
       }
+        .loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:red;
+        }
     }
   }
 }
