@@ -11,13 +11,13 @@
                 <li v-show="btnText !== '确认修改'">
                     <div class="title">
                         <span class="icon"></span>  
-                        <span class="desc">姓名</span>
+                        <span class="desc">姓氏</span>
                     </div>
                     <div class="line">
                         <span></span>
                     </div>
                     <div class="cont">
-                        <input type="text" placeholder="请输入您的姓名" class="text" v-model="nickName">
+                        <input type="text" placeholder="请输入您的姓氏" class="text" v-model="nickName">
                     </div>
                 </li>
                 <li v-show="btnText !== '确认修改'">
