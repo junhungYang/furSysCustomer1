@@ -15,7 +15,7 @@
           </path>
         </svg>
       </div>
-      <div class="text">Just a moment...</div>
+      <div class="text">loading...</div>
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.738);
+  background: rgba(255, 255, 255, 0.6);
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
@@ -40,6 +40,8 @@
   display: inline-block;
   height: 30px;
   line-height: 30px;
+  font-size: 13px;
+  color:#353535;
 }
 .wrap {
   position: absolute;
@@ -50,7 +52,7 @@
 }
 svg path,
 svg rect {
-  fill: #007aff;
+  fill: #c59a68;
 }
 </style>
 

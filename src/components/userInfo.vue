@@ -80,9 +80,10 @@
                             购买系列: <span>{{item.series_name}}</span>
                         </div>
                     </li>
-                    <!-- <div class="loading" v-show="loadingFlag">{{loadingState}}</div> -->
                 </ul>
-                <div class="loading" v-show="loadingFlag"></div>
+                <div class="loading" v-show="loadingFlag">
+                    <v-loadingAnimate></v-loadingAnimate>
+                </div>
             </div>
         </div>
     </div>
@@ -91,7 +92,7 @@
 import axios from 'axios'
 import BScroll from 'better-scroll'
 import Vue from 'vue'
-// import waterfull from '../plugin/waterfullApi'
+import loadingAnimate from '../plugin/loadingAnimate'
 import router from '../router/index'
 import { mapState, mapMutations } from 'vuex'
 export default {
@@ -101,7 +102,7 @@ export default {
             loadingFlag: false,
             userLevel: '',
             pageIndex:1,
-            loadingFlag:true
+            loadingFlag:false
         }
     },
     computed: {
@@ -112,17 +113,15 @@ export default {
             click: true,
             probeType: 3,
             pullDownRefresh: {
-                threshold: 50,
+                threshold: 20,
                 stop: 0
             },
             pullUpLoad:true
         })
-        // waterfull.scrollGetData(this, 'scrollWrap', 'scrollList', '/api/user/getUserOrderList')
         this.scrollEventInit()
 
     },
     created() {
-        // this.waterfullInit()
         this.getUserInfo()
         this.getUserOrderList(1)
     },
@@ -146,7 +145,7 @@ export default {
                 }else if(res.data.code === -1) {
                     alert(res.data.msg)
                 }else if(res.data.code === 10101) {
-                    // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                    location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                 }
             })
         },
@@ -165,8 +164,10 @@ export default {
         //瀑布流获取用户购买记录
         getUserOrderList(num) {
             console.log(this.pageIndex)
+            this.loadingFlag = true
             let str = `pageNumber=${this.pageIndex}&pageSize=10`
             // /api/user/getUserOrderList
+            // ${domain.testUrl}user/getUserOrderList?${str}
             axios.get(`${domain.testUrl}user/getUserOrderList?${str}`).then(res => {
                 if(res.data.code === 0) {
                         this.historyList = res.data.data.list
@@ -174,21 +175,21 @@ export default {
                     }else if(res.data.code === -1) {
                         alert(res.data.msg)
                     }else if(res.data.code === 10101) {
-                        // location.assign('http://qinqing.ydcycloud.com/user/toOauth')
+                        location.assign('http://qinqing.ydcycloud.com/user/toOauth')
                     }
             })
-            
+            this.timer = setTimeout(() => {
+                this.loadingFlag = false
+            }, 1500);
         },
-        //初始化瀑布流必备属性
-        // waterfullInit() {
-        //     waterfull.propInit(this)
-        // },
-        //当重新获取信息后更新scroll
         scrollRefresh() {
             Vue.nextTick(() => {
                 this.scrollList.refresh()
             })
         }
+    },
+    components: {
+        'v-loadingAnimate':loadingAnimate
     }
 }
 </script>
@@ -404,9 +405,10 @@ export default {
       }
         .loading {
             position: absolute;
+            top:0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background:red;
         }
     }
   }
